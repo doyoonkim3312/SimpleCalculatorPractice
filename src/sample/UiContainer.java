@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,8 +21,8 @@ public class UiContainer {
 
     private static double numberStored = 0;
     private static boolean operationRegistered = false;
-
-    private static NumberBtnController mainController = new NumberBtnController();
+    private static Operator operatorType;
+    private static boolean initialClicked = true;
 
     public UiContainer() {
         // Label
@@ -29,7 +30,6 @@ public class UiContainer {
         mainLabel.setAlignment(Pos.BASELINE_CENTER);
         mainLabel.setUnderline(true);
 
-        mainController.setDisplay(mainLabel);
 
         // Buttons
         Button sign = buttonFactory("-/+");
@@ -38,52 +38,105 @@ public class UiContainer {
         divide.setOnAction((new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                System.out.println("Current OP Register status: " + operationRegistered);
+                operatorType = Operator.DIVIDE;
                 if(operationRegistered) {
+                    System.out.println("line 1");
+                    double subResult = numberStored / Double.parseDouble(mainLabel.getText());
+                    System.out.println(subResult);
+                    mainLabel.setText(Double.toString(subResult));
+                    numberStored = subResult;
 
+                    operationRegistered = false;
+                } else {
+                    System.out.println("line 2");
+                    numberStored = Double.parseDouble(mainLabel.getText());
+
+                    operationRegistered = true;
                 }
+                initialClicked = true;
             }
         }));
         Button multiply = buttonFactory("*");
         Button subtract = buttonFactory("-");
         Button addition = buttonFactory("+");
         Button equals = buttonFactory("=");
+        equals.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                switch (operatorType.name()) {
+                    case "DIVIDE":
+                        double subResult = numberStored / Double.parseDouble(mainLabel.getText());
+                        mainLabel.setText(Double.toString(subResult));
+                        numberStored = subResult;
+                        initialClicked = true;
+
+
+                }
+            }
+        });
 
         Button decimal = buttonFactory(".");
 
         Button number0 = buttonFactory("0");
+        number0.setOnAction(new EventHandler<ActionEvent>() {
 
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if (operationRegistered) {
+                    if (initialClicked) {
+                        mainLabel.setText(number0.getText());
+                        initialClicked = false;
+                    } else {
+                        mainLabel.setText(mainLabel.getText() + number0.getText());
+                    }
+                } else {
+                    if (initialClicked) {
+                        mainLabel.setText(number0.getText());
+                        initialClicked = false;
+                    } else {
+
+                    }
+                }
+            }
+        });
 
         Button number1 = buttonFactory("1");
-
+        //number1.setOnAction(mainController.setNumber("1"));
 
         Button number2 = buttonFactory("2");
-
+        //number2.setOnAction(mainController.setNumber("2"));
 
         Button number3 = buttonFactory("3");
-
+        //number3.setOnAction(mainController.setNumber("3"));
 
         Button number4 = buttonFactory("4");
-
+        //number4.setOnAction(mainController.setNumber("4"));
 
         Button number5 = buttonFactory("5");
-
+        //number5.setOnAction(mainController.setNumber("5"));
 
         Button number6 = buttonFactory("6");
-
+        //number6.setOnAction(mainController.setNumber("6"));
 
         Button number7 = buttonFactory("7");
-
+        //number7.setOnAction(mainController.setNumber("7"));
 
         Button number8 = buttonFactory("8");
-
+        //number8.setOnAction(mainController.setNumber("8"));
 
         Button number9 = buttonFactory("9");
+        //number9.setOnAction(mainController.setNumber("9"));
+
 
         Button clear = buttonFactory("AC");
         clear.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                mainLabel.setText("");
+                mainLabel.setText("0");
+                operatorType = null;
+                operationRegistered = false;
+                //mainController.setInitialClick();
             }
         });
 
@@ -134,6 +187,13 @@ public class UiContainer {
         btn.setTextAlignment(TextAlignment.CENTER);
 
         return btn;
+    }
+
+    class NumberBtnController implements EventHandler {
+        @Override
+        public void handle(Event event) {
+
+        }
     }
 
 
