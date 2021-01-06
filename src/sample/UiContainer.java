@@ -30,9 +30,8 @@ public class UiContainer {
         mainLabel.setAlignment(Pos.BASELINE_CENTER);
         mainLabel.setUnderline(true);
 
-
         // Buttons
-        Button sign = buttonFactory("-/+");
+        Button sign =  buttonFactory("-/+");
         Button percentage = buttonFactory("%");
         Button divide = buttonFactory("/");
         divide.setOnAction((new EventHandler<ActionEvent>() {
@@ -79,54 +78,34 @@ public class UiContainer {
         Button decimal = buttonFactory(".");
 
         Button number0 = buttonFactory("0");
-        number0.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                if (operationRegistered) {
-                    if (initialClicked) {
-                        mainLabel.setText(number0.getText());
-                        initialClicked = false;
-                    } else {
-                        mainLabel.setText(mainLabel.getText() + number0.getText());
-                    }
-                } else {
-                    if (initialClicked) {
-                        mainLabel.setText(number0.getText());
-                        initialClicked = false;
-                    } else {
-
-                    }
-                }
-            }
-        });
+        number0.setOnAction(new NumBtnControl("0"));
 
         Button number1 = buttonFactory("1");
-        //number1.setOnAction(mainController.setNumber("1"));
+        number1.setOnAction(new NumBtnControl("1"));
 
         Button number2 = buttonFactory("2");
-        //number2.setOnAction(mainController.setNumber("2"));
+        number2.setOnAction(new NumBtnControl("2"));
 
         Button number3 = buttonFactory("3");
-        //number3.setOnAction(mainController.setNumber("3"));
+        number3.setOnAction(new NumBtnControl("3"));
 
         Button number4 = buttonFactory("4");
-        //number4.setOnAction(mainController.setNumber("4"));
+        number4.setOnAction(new NumBtnControl("4"));
 
         Button number5 = buttonFactory("5");
-        //number5.setOnAction(mainController.setNumber("5"));
+        number5.setOnAction(new NumBtnControl("5"));
 
         Button number6 = buttonFactory("6");
-        //number6.setOnAction(mainController.setNumber("6"));
+        number6.setOnAction(new NumBtnControl("6"));
 
         Button number7 = buttonFactory("7");
-        //number7.setOnAction(mainController.setNumber("7"));
+        number7.setOnAction(new NumBtnControl("7"));
 
         Button number8 = buttonFactory("8");
-        //number8.setOnAction(mainController.setNumber("8"));
+        number8.setOnAction(new NumBtnControl("8"));
 
         Button number9 = buttonFactory("9");
-        //number9.setOnAction(mainController.setNumber("9"));
+        number9.setOnAction(new NumBtnControl("9"));
 
 
         Button clear = buttonFactory("AC");
@@ -189,10 +168,33 @@ public class UiContainer {
         return btn;
     }
 
-    class NumberBtnController implements EventHandler {
+    class NumBtnControl implements EventHandler {
+        private String number;
+
+        public NumBtnControl(String number) {
+            this.number = number;
+        }
+
         @Override
         public void handle(Event event) {
+            System.out.println("INPUT STATUS: " + operationRegistered);
+            System.out.println("Button " + this.number);
 
+            if (operationRegistered) {
+                if (initialClicked) {
+                    mainLabel.setText(this.number);
+                    initialClicked = false;
+                } else {
+                    mainLabel.setText(mainLabel.getText() + this.number);
+                }
+            } else {
+                if (initialClicked) {
+                    mainLabel.setText(this.number);
+                    initialClicked = false;
+                } else {
+                    mainLabel.setText(mainLabel.getText() + this.number);
+                }
+            }
         }
     }
 
