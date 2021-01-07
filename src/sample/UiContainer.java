@@ -21,8 +21,9 @@ public class UiContainer {
 
     private static double numberStored = 0;
     private static boolean operationRegistered = false;
-    private static Operator operatorType;
+    private Operator operatorType;
     private static boolean initialClicked = true;
+    private boolean decimlaExists = false;
 
     public UiContainer() {
         // Label
@@ -32,21 +33,51 @@ public class UiContainer {
 
         // Buttons
         Button sign =  buttonFactory("-/+");
+        sign.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    String[] numArray = mainLabel.getText().split("");
+                    if (numArray[0].equals("-")) {
+                        mainLabel.setText("");
+                        for (int i = 1; i < numArray.length; i++) {
+                            mainLabel.setText(mainLabel.getText() + numArray[i]);
+                        }
+                    } else {
+                        String sign = "-";
+                        mainLabel.setText(sign + mainLabel.getText());
+                    }
+                } catch (IndexOutOfBoundsException iob) {
+                    System.out.println(iob.toString());
+                }
+            }
+        });
+
         Button percentage = buttonFactory("%");
+        percentage.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                double subResult = Double.parseDouble(mainLabel.getText()) / 100;
+                mainLabel.setText(Double.toString(subResult));
+                operationRegistered = false;
+            }
+        });
+
         Button divide = buttonFactory("/");
         divide.setOnAction((new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+
                 System.out.println("Current OP Register status: " + operationRegistered);
                 operatorType = Operator.DIVIDE;
                 if(operationRegistered) {
                     System.out.println("line 1");
-                    double subResult = numberStored / Double.parseDouble(mainLabel.getText());
-                    System.out.println(subResult);
-                    mainLabel.setText(Double.toString(subResult));
-                    numberStored = subResult;
+                    double result = getSubResult(mainLabel.getText(), Operator.DIVIDE);
+                    System.out.println(result);
+                    mainLabel.setText(Double.toString(result));
+                    numberStored = result;
 
-                    operationRegistered = false;
+                    operationRegistered = true;
                 } else {
                     System.out.println("line 2");
                     numberStored = Double.parseDouble(mainLabel.getText());
@@ -56,26 +87,120 @@ public class UiContainer {
                 initialClicked = true;
             }
         }));
+
         Button multiply = buttonFactory("*");
+        multiply.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+                System.out.println("Current OP Register status: " + operationRegistered);
+                operatorType = Operator.MULTIPLY;
+                if(operationRegistered) {
+                    System.out.println("line 1");
+                    double result = getSubResult(mainLabel.getText(), Operator.MULTIPLY);
+                    System.out.println(result);
+                    mainLabel.setText(Double.toString(result));
+                    numberStored = result;
+
+                    operationRegistered = true;
+                } else {
+                    System.out.println("line 2");
+                    numberStored = Double.parseDouble(mainLabel.getText());
+
+                    operationRegistered = true;
+                }
+                initialClicked = true;
+            }
+        });
+
         Button subtract = buttonFactory("-");
+        subtract.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+                System.out.println("Current OP Register status: " + operationRegistered);
+                operatorType = Operator.SUBTRACT;
+                if(operationRegistered) {
+                    System.out.println("line 1");
+                    double result = getSubResult(mainLabel.getText(), Operator.SUBTRACT);
+                    System.out.println(result);
+                    mainLabel.setText(Double.toString(result));
+                    numberStored = result;
+
+                    operationRegistered = true;
+                } else {
+                    System.out.println("line 2");
+                    numberStored = Double.parseDouble(mainLabel.getText());
+
+                    operationRegistered = true;
+                }
+                initialClicked = true;
+            }
+        });
+
         Button addition = buttonFactory("+");
+        addition.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                
+                System.out.println("Current OP Register status: " + operationRegistered);
+                operatorType = Operator.ADDITION;
+                if(operationRegistered) {
+                    System.out.println("line 1");
+                    double result = getSubResult(mainLabel.getText(), Operator.ADDITION);
+                    System.out.println(result);
+                    mainLabel.setText(Double.toString(result));
+                    numberStored = result;
+
+                    operationRegistered = true;
+                } else {
+                    System.out.println("line 2");
+                    numberStored = Double.parseDouble(mainLabel.getText());
+
+                    operationRegistered = true;
+                }
+                initialClicked = true;
+            }
+        });
+
         Button equals = buttonFactory("=");
         equals.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                double subResult;
                 switch (operatorType.name()) {
                     case "DIVIDE":
-                        double subResult = numberStored / Double.parseDouble(mainLabel.getText());
+                        subResult = numberStored / Double.parseDouble(mainLabel.getText());
                         mainLabel.setText(Double.toString(subResult));
                         numberStored = subResult;
                         initialClicked = true;
-
-
+                    case "MULTIPLY":
+                        subResult = numberStored * Double.parseDouble(mainLabel.getText());
+                        mainLabel.setText(Double.toString(subResult));
+                        numberStored = subResult;
+                        initialClicked = true;
+                    case "SUBTRACT":
+                        subResult = numberStored - Double.parseDouble(mainLabel.getText());
+                        mainLabel.setText(Double.toString(subResult));
+                        initialClicked = true;
+                    case "ADDITION":
+                        subResult = numberStored + Double.parseDouble(mainLabel.getText());
+                        mainLabel.setText(Double.toString(subResult));
+                        initialClicked = true;
+                    default: break;
                 }
             }
         });
 
         Button decimal = buttonFactory(".");
+        decimal.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if (!decimlaExists) {
+                    mainLabel.setText(mainLabel.getText() + ".");
+                }
+            }
+        });
 
         Button number0 = buttonFactory("0");
         number0.setOnAction(new NumBtnControl("0"));
@@ -115,6 +240,7 @@ public class UiContainer {
                 mainLabel.setText("0");
                 operatorType = null;
                 operationRegistered = false;
+                numberStored = 0;
                 //mainController.setInitialClick();
             }
         });
@@ -158,6 +284,17 @@ public class UiContainer {
 
     public VBox getLayoutContainer() {
         return layoutContainer;
+    }
+
+    public double getSubResult(String num, Operator operator) {
+        double subResult = numberStored;
+        switch (operator) {
+            case DIVIDE -> { subResult = numberStored / Double.parseDouble(num); }
+            case ADDITION -> {subResult = numberStored + Double.parseDouble(num); }
+            case MULTIPLY -> { subResult =  numberStored * Double.parseDouble(num); }
+            case SUBTRACT -> { subResult = numberStored - Double.parseDouble(num); }
+        }
+        return subResult;
     }
 
     private static Button buttonFactory(String tag) {
