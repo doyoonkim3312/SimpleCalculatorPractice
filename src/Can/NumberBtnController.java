@@ -1,8 +1,10 @@
-package sample;
+package Can;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+
+import javax.swing.*;
 
 
 public class NumberBtnController implements EventHandler<ActionEvent> {
@@ -18,10 +20,10 @@ public class NumberBtnController implements EventHandler<ActionEvent> {
         this.display = null;
     }
 
-    public NumberBtnController setNumber(String number) {
+    public EventHandler<ActionEvent> setNumber(String number) {
         this.number = number;
         System.out.println("Set Number method: " + number);
-        return this;
+        return this::handle;
     }
 
     public void setOperaterRegistered(boolean operaterRegistered) {
