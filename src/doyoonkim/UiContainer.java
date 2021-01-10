@@ -99,28 +99,28 @@ public class UiContainer {
         Button divide = buttonFactory("/");
         divide.addEventHandler(ActionEvent.ACTION, (e) -> {
             operatorStatus.setText("DIVIDE");
-            mainCalculator.divide();
+            mainCalculator.divide(initialClicked);
             initialClicked = true;
         });
 
         Button multiply = buttonFactory("*");
         multiply.addEventHandler(ActionEvent.ACTION, (e) -> {
             operatorStatus.setText("MULTIPLY");
-            mainCalculator.multiply();
+            mainCalculator.multiply(initialClicked);
             initialClicked = true;
         });
 
         Button subtract = buttonFactory("-");
         subtract.addEventHandler(ActionEvent.ACTION, (e) -> {
             operatorStatus.setText("SUBTRACT");
-            mainCalculator.subtract();
+            mainCalculator.subtract(initialClicked);
             initialClicked = true;
         });
 
         Button addition = buttonFactory("+");
         addition.addEventHandler(ActionEvent.ACTION, (e) -> {
             operatorStatus.setText("ADD");
-            mainCalculator.addition();
+            mainCalculator.addition(initialClicked);
             initialClicked = true;
         });
 
