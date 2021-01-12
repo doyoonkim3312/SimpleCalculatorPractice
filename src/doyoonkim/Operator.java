@@ -1,3 +1,3 @@
 package doyoonkim;
 
-public enum Operator{SIGN, PERCENTAGE, DIVIDE, MULTIPLY, SUBTRACT, ADDITION, EQUALS, DECIMAL, NON}
+public enum Operator{DIVIDE, MULTIPLY, SUBTRACT, ADDITION, NON}
