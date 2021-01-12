@@ -13,7 +13,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * <h1>Ui Container</h1>
+ * <h3>This class contains entire elements that consist GUI</h3>
+ */
 public class UiContainer {
+
     private Label mainLabel;
     private Label operatorStatus;
     private HBox topArea;
@@ -29,7 +34,10 @@ public class UiContainer {
 
     private static ScientificCalculate mainCalculator;
 
-
+    /**
+     * Default constructor for instantiating UiContainer object.
+     * No param value required.
+     */
     public UiContainer() {
         // Label
         mainLabel = new Label("0");
@@ -226,6 +234,13 @@ public class UiContainer {
     }
 
 
+    /**
+     * <h1>buttonFactory</h1>
+     * <h3>Class for creating new button object.</h3>
+     * <p>Default size: 70*70, Default Font size: 20, Default alignment: CENTER.</p>
+     * @param tag: String that shown on button.
+     * @return Button object with default configuration.
+     */
     private static Button buttonFactory(String tag) {
         Button btn = new Button(tag);
         btn.setPrefSize(70.0, 70.0);
@@ -236,6 +251,12 @@ public class UiContainer {
         return btn;
     }
 
+    /**
+     * <h1>NumBtnControl</h1>
+     * <h3>This class offers Action Event for clicking button.</h3>
+     * <p>This class implements EventHandler interface, which handles all events occurred by user interaction.</p>
+     *
+     */
     class NumBtnControl implements EventHandler {
         private String number;
 
