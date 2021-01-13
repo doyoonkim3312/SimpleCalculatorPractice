@@ -8,12 +8,10 @@ import javafx.scene.control.Label;
  */
 public class ScientificCalculate {
     private Operator operatorType;
-    //private Operator currentOperator;
     private Operator operatorAssigned;
     private Label mainLabel;
     private double[] numberStored = new double[2];
     private boolean isNumberInLabel = false;
-    // private boolean isNumberClicked = false;
 
     /**
      * Default constructor for instantiating.
@@ -21,7 +19,6 @@ public class ScientificCalculate {
      */
     public ScientificCalculate(Label mainLabel) {
         operatorType = Operator.NON;
-        //currentOperator = Operator.NON;
         operatorAssigned = Operator.NON;
         this.mainLabel = mainLabel;
     }
@@ -33,27 +30,7 @@ public class ScientificCalculate {
     public void divide(boolean numberBtnInitClickStat) {
         //System.out.println("CURRENT OPERATOR REGISTERED: " + operatorType.name());
         if (!numberBtnInitClickStat) {
-            switch (operatorType) {
-                case ADDITION, SUBTRACT -> {
-                    if (numberStored[1] == 0) {
-                        operatorAssigned = operatorType;
-                        numberStored[1] = Double.parseDouble(mainLabel.getText());
-                    } else {
-                        numberStored[1] = numberStored[1] / Double.parseDouble(mainLabel.getText());
-                        mainLabel.setText(Double.toString(hasNegSign(numberStored[1])));
-                    }
-                }
-                case MULTIPLY, DIVIDE -> {
-                    if (numberStored[1] != 0) {
-                        numberStored[1] = numberStored[1] / Double.parseDouble(mainLabel.getText());
-                        mainLabel.setText(Double.toString(numberStored[1]));
-                    } else {
-                        numberStored[0] = getSubResult(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
-                        mainLabel.setText(Double.toString(numberStored[0]));
-                    }
-                }
-                default -> numberStored[0] = Double.parseDouble(mainLabel.getText());
-            }
+            arithmeticMultiplication(operatorType, Operator.DIVIDE);
         }
         operatorType = Operator.DIVIDE;
     }
@@ -65,27 +42,7 @@ public class ScientificCalculate {
     public void multiply(boolean numberBtnInitClickStat) {
         //System.out.println("CURRENT OPERATOR REGISTERED: " + operatorType.name());
         if (!numberBtnInitClickStat) {
-            switch (operatorType) {
-                case ADDITION, SUBTRACT -> {
-                    if (numberStored[1] == 0) {
-                        operatorAssigned = operatorType;
-                        numberStored[1] = Double.parseDouble(mainLabel.getText());
-                    } else {
-                        numberStored[1] = numberStored[1] * Double.parseDouble(mainLabel.getText());
-                        mainLabel.setText(Double.toString(hasNegSign(numberStored[1])));
-                    }
-                }
-                case MULTIPLY, DIVIDE -> {
-                    if (numberStored[1] != 0) {
-                        numberStored[1] = numberStored[1] * Double.parseDouble(mainLabel.getText());
-                        mainLabel.setText(Double.toString(numberStored[1]));
-                    } else {
-                        numberStored[0] = getSubResult(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
-                        mainLabel.setText(Double.toString(numberStored[0]));
-                    }
-                }
-                default -> numberStored[0] = Double.parseDouble(mainLabel.getText());
-            }
+            arithmeticMultiplication(operatorType, Operator.MULTIPLY);
         }
         operatorType = Operator.MULTIPLY;
     }
@@ -97,25 +54,7 @@ public class ScientificCalculate {
     public void subtract(boolean numberBtnInitClickStat) {
         //System.out.println("CURRENT OPERATOR REGISTERED: " + operatorType.name());
         if (!numberBtnInitClickStat) {
-            switch (operatorType) {
-                case ADDITION, SUBTRACT -> {
-                    numberStored[0] = getSubResult(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
-                    mainLabel.setText(Double.toString(numberStored[0]));
-                }
-                case MULTIPLY, DIVIDE -> {
-                    if (numberStored[1] != 0) {
-                        double subResult = getSubResult(numberStored[1], Double.parseDouble(mainLabel.getText()), operatorType);
-                        numberStored[0] = getSubResult(numberStored[0], subResult, operatorAssigned);
-                        numberStored[1] = 0;
-                        operatorAssigned = Operator.NON;
-                        mainLabel.setText(Double.toString(numberStored[0]));
-                    } else {
-                        numberStored[0] = getSubResult(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
-                        mainLabel.setText(Double.toString(numberStored[0]));
-                    }
-                }
-                default -> numberStored[0] = Double.parseDouble(mainLabel.getText());
-            }
+            arithmeticAddition(operatorType, Operator.SUBTRACT);
         }
         operatorType = Operator.SUBTRACT;
     }
@@ -128,25 +67,7 @@ public class ScientificCalculate {
         //System.out.println("CURRENT OPERATOR REGISTERED: " + operatorType.name());
         //System.out.println("NUM STORED 1: " + numberStored[0] + "\nNUM STORED 2: " + numberStored[1]);
         if (!numberBtnInitClickStat) {
-            switch (operatorType) {
-                case ADDITION, SUBTRACT -> {
-                    numberStored[0] = getSubResult(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
-                    mainLabel.setText(Double.toString(numberStored[0]));
-                }
-                case MULTIPLY, DIVIDE -> {
-                    if (numberStored[1] != 0) {
-                        double subResult = getSubResult(numberStored[1], Double.parseDouble(mainLabel.getText()), operatorType);
-                        numberStored[0] = getSubResult(numberStored[0], subResult, operatorAssigned);
-                        numberStored[1] = 0;
-                        operatorAssigned = Operator.NON;
-                        mainLabel.setText(Double.toString(numberStored[0]));
-                    } else {
-                        numberStored[0] = getSubResult(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
-                        mainLabel.setText(Double.toString(numberStored[0]));
-                    }
-                }
-                default -> numberStored[0] = Double.parseDouble(mainLabel.getText());
-            }
+            arithmeticAddition(operatorType, Operator.ADDITION);
         }
         operatorType = Operator.ADDITION;
     }
@@ -218,6 +139,54 @@ public class ScientificCalculate {
             case SUBTRACT -> { value = num1 - num2; }
         }
         return value;
+    }
+
+    public void arithmeticMultiplication(Operator operatorType, Operator clickedOperator) {
+        switch (operatorType) {
+            case ADDITION, SUBTRACT -> {
+                if (numberStored[1] == 0) {
+                    operatorAssigned = operatorType;
+                    numberStored[1] = Double.parseDouble(mainLabel.getText());
+                } else {
+                    //numberStored[1] = numberStored[1] / Double.parseDouble(mainLabel.getText());
+                    numberStored[1] = getSubResult(numberStored[1], Double.parseDouble(mainLabel.getText()), clickedOperator);
+                    mainLabel.setText(Double.toString(hasNegSign(numberStored[1])));
+                }
+            }
+            case MULTIPLY, DIVIDE -> {
+                if (numberStored[1] != 0) {
+                    //numberStored[1] = numberStored[1] / Double.parseDouble(mainLabel.getText());
+                    numberStored[1] = getSubResult(numberStored[1], Double.parseDouble(mainLabel.getText()), clickedOperator);
+                    mainLabel.setText(Double.toString(numberStored[1]));
+                } else {
+                    numberStored[0] = getSubResult(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
+                    mainLabel.setText(Double.toString(numberStored[0]));
+                }
+            }
+            default -> numberStored[0] = Double.parseDouble(mainLabel.getText());
+        }
+    }
+
+    public void arithmeticAddition(Operator operatorType, Operator clickedOperator) {
+        switch (operatorType) {
+            case ADDITION, SUBTRACT -> {
+                numberStored[0] = getSubResult(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
+                mainLabel.setText(Double.toString(numberStored[0]));
+            }
+            case MULTIPLY, DIVIDE -> {
+                if (numberStored[1] != 0) {
+                    double subResult = getSubResult(numberStored[1], Double.parseDouble(mainLabel.getText()), operatorType);
+                    numberStored[0] = getSubResult(numberStored[0], subResult, operatorAssigned);
+                    numberStored[1] = 0;
+                    operatorAssigned = Operator.NON;
+                    mainLabel.setText(Double.toString(numberStored[0]));
+                } else {
+                    numberStored[0] = getSubResult(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
+                    mainLabel.setText(Double.toString(numberStored[0]));
+                }
+            }
+            default -> numberStored[0] = Double.parseDouble(mainLabel.getText());
+        }
     }
 
 
