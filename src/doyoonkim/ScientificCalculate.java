@@ -110,6 +110,29 @@ public class ScientificCalculate {
         return false;
     }
 
+    public String sqRoot(double num) {
+        double base = 0;
+        while (base < num) {
+            base++;
+            if ((base * base) == num) {
+                return Double.toString(base);
+            }
+        }
+
+        double termInSequence = ((base * base) + num) / (2 * base);
+        for (int i = 0; i < 10; i++) {
+            termInSequence = ((termInSequence * termInSequence) + num) / (2 * termInSequence);
+        }
+        return String.format("%.9f", termInSequence);
+    }
+
+    public double squared(double num) {
+        return num * num;
+    }
+
+    // this method need to be finalized later.
+    // public double pow(double num, double targetPow);
+
     /**
      * Checking there's a neg sign before numbers. (For -/+ button.)
      * @param value: Numeric value on label.
@@ -141,6 +164,12 @@ public class ScientificCalculate {
         return value;
     }
 
+    /**
+     * <h1>arithmeticMultiplication</h1>
+     * <p>This method performs calculation and save result when user clicks either multiply, or divide.</p>
+     * @param operatorType: operator that clicked before.
+     * @param clickedOperator: operator that user clicked.
+     */
     public void arithmeticMultiplication(Operator operatorType, Operator clickedOperator) {
         switch (operatorType) {
             case ADDITION, SUBTRACT -> {
@@ -166,7 +195,13 @@ public class ScientificCalculate {
             default -> numberStored[0] = Double.parseDouble(mainLabel.getText());
         }
     }
-
+    
+    /**
+     * <h1>arithmeticAddition</h1>
+     * <p>This method performs calculation and save result when user clicks either addition or subtract button.</p>
+     * @param operatorType: Operator that clicked before.
+     * @param clickedOperator: Operator that user clicked.
+     */
     public void arithmeticAddition(Operator operatorType, Operator clickedOperator) {
         switch (operatorType) {
             case ADDITION, SUBTRACT -> {
@@ -188,6 +223,5 @@ public class ScientificCalculate {
             default -> numberStored[0] = Double.parseDouble(mainLabel.getText());
         }
     }
-
 
 }

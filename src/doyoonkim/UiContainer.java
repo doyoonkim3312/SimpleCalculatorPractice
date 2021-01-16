@@ -21,6 +21,7 @@ public class UiContainer {
 
     private Label mainLabel;
     private Label operatorStatus;
+    private HBox topHighCalcArea;
     private HBox topArea;
     private GridPane numberPane;
     private HBox bottomArea;
@@ -73,27 +74,41 @@ public class UiContainer {
                 }
             }
         });
-        /*
-        sign.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    String[] numArray = mainLabel.getText().split("");
-                    if (numArray[0].equals("-")) {
-                        mainLabel.setText("");
-                        for (int i = 1; i < numArray.length; i++) {
-                            mainLabel.setText(mainLabel.getText() + numArray[i]);
-                        }
-                    } else {
-                        String sign = "-";
-                        mainLabel.setText(sign + mainLabel.getText());
-                    }
-                } catch (IndexOutOfBoundsException iob) {
-                    System.out.println(iob.toString());
-                }
+
+        Button sqRoot = buttonFactory("√");
+        sqRoot.addEventHandler(ActionEvent.ACTION, (e) -> {
+            try {
+               if (isNumberInLabel) {
+                   String result = mainCalculator.sqRoot(Double.parseDouble(mainLabel.getText()));
+                   mainLabel.setText(result);
+               }
+            } catch (Exception exception) {
+                mainLabel.setText("ERROR");
             }
         });
-         */
+
+        Button squared = buttonFactory("x²");
+        squared.addEventHandler(ActionEvent.ACTION, (e) -> {
+            try {
+                if (isNumberInLabel) {
+                    double result = mainCalculator.squared(Double.parseDouble(mainLabel.getText()));
+                    mainLabel.setText(Double.toString(result));
+                }
+            } catch (Exception exception) {
+                mainLabel.setText("ERROR");
+            }
+        });
+
+        Button pi = buttonFactory("𝜋");
+        pi.addEventHandler(ActionEvent.ACTION, (e) -> {
+            mainLabel.setText(Double.toString(StrictMath.PI));
+        });
+
+        Button powOfE = buttonFactory("eⁿ");
+        powOfE.addEventHandler(ActionEvent.ACTION, (e) -> {
+            double exp = Double.parseDouble(mainLabel.getText());
+            mainLabel.setText(Double.toString(Math.pow(StrictMath.PI, exp)));
+        });
 
         Button percentage = buttonFactory("%");
         percentage.setOnAction(new EventHandler<ActionEvent>() {
@@ -195,6 +210,9 @@ public class UiContainer {
             initialClicked = true;
         });
 
+        topHighCalcArea = new HBox(10.0, squared, sqRoot, pi, powOfE);
+        topHighCalcArea.setAlignment(Pos.CENTER);
+
         topArea = new HBox(10.0, clear, sign, percentage, divide);
         topArea.setAlignment(Pos.CENTER);
 
@@ -222,7 +240,7 @@ public class UiContainer {
         bottomArea = new HBox(10.0, number0, decimal, equals);
         bottomArea.setAlignment(Pos.BOTTOM_CENTER);
 
-        layoutContainer = new VBox(10.0,operatorStatus, mainLabel, topArea, numberPane, bottomArea);
+        layoutContainer = new VBox(10.0,operatorStatus, mainLabel, topArea, topHighCalcArea, numberPane, bottomArea);
         layoutContainer.setAlignment(Pos.CENTER);
         layoutContainer.setPadding(new Insets(5.0));
 

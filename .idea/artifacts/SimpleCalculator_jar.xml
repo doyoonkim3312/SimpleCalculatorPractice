@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="SimpleCalculator:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/SimpleCalculator_jar</output-path>
+    <output-path>$USER_HOME$/Documents/Development/Java/Applications</output-path>
     <root id="archive" name="SimpleCalculator.jar">
       <element id="module-output" name="SimpleCalculator" />
       <element id="extracted-dir" path="$PATH_TO_FX$/src.zip" path-in-jar="/" />
