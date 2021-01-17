@@ -22,6 +22,7 @@ public class UiContainer {
     private Label mainLabel;
     private Label operatorStatus;
     private HBox topHighCalcArea;
+    private HBox trigCalcArea;
     private HBox topArea;
     private GridPane numberPane;
     private HBox bottomArea;
@@ -108,6 +109,30 @@ public class UiContainer {
         powOfE.addEventHandler(ActionEvent.ACTION, (e) -> {
             double exp = Double.parseDouble(mainLabel.getText());
             mainLabel.setText(Double.toString(mainCalculator.powE(exp)));
+        });
+
+        Button factorial = buttonFactory("x!");
+        factorial.addEventHandler(ActionEvent.ACTION, (e) -> {
+            double result = mainCalculator.factorial(Double.parseDouble(mainLabel.getText()));
+            mainLabel.setText(Double.toString(result));
+        });
+
+        Button trigSin = buttonFactory("sin");
+        trigSin.addEventHandler(ActionEvent.ACTION, (e) -> {
+            double result = mainCalculator.trigonometric(Double.parseDouble(mainLabel.getText()), Operator.SIN);
+            mainLabel.setText(Double.toString(result));
+        });
+
+        Button trigCos = buttonFactory("cos");
+        trigCos.addEventHandler(ActionEvent.ACTION, (e) -> {
+            double result = mainCalculator.trigonometric(Double.parseDouble(mainLabel.getText()), Operator.COS);
+            mainLabel.setText(Double.toString(result));
+        });
+
+        Button trigTan = buttonFactory("tan");
+        trigTan.addEventHandler(ActionEvent.ACTION, (e) -> {
+            double result = mainCalculator.trigonometric(Double.parseDouble(mainLabel.getText()), Operator.TAN);
+            mainLabel.setText(Double.toString(result));
         });
 
         Button percentage = buttonFactory("%");
@@ -210,6 +235,9 @@ public class UiContainer {
         topHighCalcArea = new HBox(10.0, squared, sqRoot, pi, divide);
         topHighCalcArea.setAlignment(Pos.CENTER);
 
+        trigCalcArea = new HBox(10.0, factorial, trigSin, trigCos, trigTan);
+        trigCalcArea.setAlignment(Pos.CENTER);
+
         topArea = new HBox(10.0, clear, sign, percentage, powOfE);
         topArea.setAlignment(Pos.CENTER);
 
@@ -237,7 +265,7 @@ public class UiContainer {
         bottomArea = new HBox(10.0, number0, decimal, equals);
         bottomArea.setAlignment(Pos.BOTTOM_CENTER);
 
-        layoutContainer = new VBox(10.0,operatorStatus, mainLabel, topArea, topHighCalcArea, numberPane, bottomArea);
+        layoutContainer = new VBox(10.0,operatorStatus, mainLabel, topArea,trigCalcArea, topHighCalcArea, numberPane, bottomArea);
         layoutContainer.setAlignment(Pos.CENTER);
         layoutContainer.setPadding(new Insets(5.0));
 

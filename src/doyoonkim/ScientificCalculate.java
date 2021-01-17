@@ -28,7 +28,7 @@ public class ScientificCalculate {
      * @param numberBtnInitClickStat: Trigger value for preventing unnecessary calculation.
      */
     public void divide(boolean numberBtnInitClickStat) {
-        //System.out.println("CURRENT OPERATOR REGISTERED: " + operatorType.name());
+        //System.out.println("OP type: " + operatorType.name() + ", numberBtnInitClickStat: " + numberBtnInitClickStat);
         if (!numberBtnInitClickStat) {
             arithmeticMultiplication(operatorType, Operator.DIVIDE);
         }
@@ -40,7 +40,7 @@ public class ScientificCalculate {
      * @param numberBtnInitClickStat: Trigger value for preventing unnecessary calculation.
      */
     public void multiply(boolean numberBtnInitClickStat) {
-        //System.out.println("CURRENT OPERATOR REGISTERED: " + operatorType.name());
+        //System.out.println("OP type: " + operatorType.name() + ", numberBtnInitClickStat: " + numberBtnInitClickStat);
         if (!numberBtnInitClickStat) {
             arithmeticMultiplication(operatorType, Operator.MULTIPLY);
         }
@@ -52,7 +52,7 @@ public class ScientificCalculate {
      * @param numberBtnInitClickStat: Trigger value for preventing unnecessary calculation.
      */
     public void subtract(boolean numberBtnInitClickStat) {
-        //System.out.println("CURRENT OPERATOR REGISTERED: " + operatorType.name());
+        //System.out.println("OP type: " + operatorType.name() + ", numberBtnInitClickStat: " + numberBtnInitClickStat);
         if (!numberBtnInitClickStat) {
             arithmeticAddition(operatorType, Operator.SUBTRACT);
         }
@@ -64,8 +64,7 @@ public class ScientificCalculate {
      * @param numberBtnInitClickStat: Trigger value for preventing unnecessary calculation.
      */
     public void addition(boolean numberBtnInitClickStat) {
-        //System.out.println("CURRENT OPERATOR REGISTERED: " + operatorType.name());
-        //System.out.println("NUM STORED 1: " + numberStored[0] + "\nNUM STORED 2: " + numberStored[1]);
+        //System.out.println("OP type: " + operatorType.name() + ", numberBtnInitClickStat: " + numberBtnInitClickStat);
         if (!numberBtnInitClickStat) {
             arithmeticAddition(operatorType, Operator.ADDITION);
         }
@@ -170,6 +169,26 @@ public class ScientificCalculate {
     // this method need to be finalized later.
     // public double pow(double num, double targetPow);
 
+    public double factorial(double value) {
+        if (value - (int) value == 0.0) {
+            int result = 1;
+            for (int i = 0; i < value; i++) {
+                result *= (i+1);
+            }
+            return result;
+        } else {
+            return Double.NaN;
+        }
+    }
+
+    public double trigonometric(double value, Operator trigType) {
+        switch (trigType) {
+            case SIN -> { return Math.sin(StrictMath.toRadians(value)); }
+            case COS -> { return Math.cos(StrictMath.toRadians(value)); }
+            case TAN -> { return Math.tan(StrictMath.toRadians(value)); }
+            default -> { return Double.NaN; }
+        }
+    }
 
     /**
      * Checking there's a neg sign before numbers. (For -/+ button.)
@@ -232,7 +251,7 @@ public class ScientificCalculate {
             case MULTIPLY, DIVIDE -> {
                 if (numberStored[1] != 0) {
                     //numberStored[1] = numberStored[1] / Double.parseDouble(mainLabel.getText());
-                    numberStored[1] = basicCalculation(numberStored[1], Double.parseDouble(mainLabel.getText()), clickedOperator);
+                    numberStored[1] = basicCalculation(numberStored[1], Double.parseDouble(mainLabel.getText()), operatorType);
                     mainLabel.setText(Double.toString(numberStored[1]));
                 } else {
                     numberStored[0] = basicCalculation(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
