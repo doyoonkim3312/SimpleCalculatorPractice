@@ -80,12 +80,12 @@ public class ScientificCalculate {
         if (operatorAssigned != Operator.NON || operatorType != Operator.NON) {
             double subResult;
             if (numberStored[1] != 0) {
-                subResult = getSubResult(numberStored[1], Double.parseDouble(mainLabel.getText()), operatorType);
-                numberStored[0] = getSubResult(numberStored[0], subResult, operatorAssigned);
+                subResult = basicCalculation(numberStored[1], Double.parseDouble(mainLabel.getText()), operatorType);
+                numberStored[0] = basicCalculation(numberStored[0], subResult, operatorAssigned);
                 numberStored[1] = 0;
                 mainLabel.setText(Double.toString(numberStored[0]));
             } else {
-                numberStored[0] = getSubResult(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
+                numberStored[0] = basicCalculation(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
                 mainLabel.setText(Double.toString(numberStored[0]));
             }
         }
@@ -110,12 +110,20 @@ public class ScientificCalculate {
         return false;
     }
 
-    public String sqRoot(double num) {
+    /**
+     * <h1>sqRoot</h1>
+     * <p>This method calculates squared root of input value, using Babylonian method.</p>
+     * <p>A sequence's term is calculated until its 10th term. Calculate lim is way more precise, but</p>
+     * <p>since this is a simple calculator, 10th term of sequence ensures enough decimal value.</p>
+     * @param num target number.
+     * @return squared root of num.
+     */
+    public double sqRoot(double num) {
         double base = 0;
         while (base < num) {
             base++;
             if ((base * base) == num) {
-                return Double.toString(base);
+                return base;
             }
         }
 
@@ -123,15 +131,45 @@ public class ScientificCalculate {
         for (int i = 0; i < 10; i++) {
             termInSequence = ((termInSequence * termInSequence) + num) / (2 * termInSequence);
         }
-        return String.format("%.9f", termInSequence);
+        return Double.parseDouble(String.format("%.9f", termInSequence));
     }
+
 
     public double squared(double num) {
         return num * num;
     }
 
+    /**
+     * <h1>powE</h1>
+     * <p>This method calculates power of e, using parameter value as a exponent</p>
+     * @param exp exponent value.
+     * @return power of e, using param value as a exponent.
+     */
+    public double powE(double exp) {
+        return Double.parseDouble(String.format("%.8f", Math.pow(StrictMath.E, exp)));
+    }
+
+    /**
+     * <h1>getPi</h1>
+     * <p>This method returns PI value until 9th decimal point.</p>
+     * @return PI value until 9th decimal point.
+     */
+    public double getPi() {
+        return Double.parseDouble(String.format("%.9f", StrictMath.PI));
+    }
+
+    /**
+     * <h1>Percentage</h1>
+     * <p>Return percentage value of parameter value</p>
+     * @param value
+     * @return percentage value of param value.
+     */
+    public double percentage(double value) {
+        return basicCalculation(value, 100, Operator.DIVIDE);
+    }
     // this method need to be finalized later.
     // public double pow(double num, double targetPow);
+
 
     /**
      * Checking there's a neg sign before numbers. (For -/+ button.)
@@ -147,13 +185,22 @@ public class ScientificCalculate {
     }
 
     /**
-     * Calculating sub result before calculating actual result.
+     * <h1>basicCalculation</h1>
+     * <p>This method performs fundamental arithmetic Calculation</p>
+     * <ul>
+     *     <li>
+     *         <h3>For division</h3>
+     *         <p>num1: numerator</p>
+     *         <p>num2: denominator</p>
+     *         <p>returns num1 / num2</p>
+     *     </li>
+     * </ul>
      * @param num1: Assigned Value. (Value that saved from last calculation.)
      * @param num2: Newly typed value.
      * @param operator: operator for calculation.
      * @return value after calculation.
      */
-    public double getSubResult(double num1, double num2, Operator operator) {
+    public double basicCalculation(double num1, double num2, Operator operator) {
         double value = 0;
         switch (operator) {
             case DIVIDE -> { value = num1 / num2;}
@@ -178,17 +225,17 @@ public class ScientificCalculate {
                     numberStored[1] = Double.parseDouble(mainLabel.getText());
                 } else {
                     //numberStored[1] = numberStored[1] / Double.parseDouble(mainLabel.getText());
-                    numberStored[1] = getSubResult(numberStored[1], Double.parseDouble(mainLabel.getText()), clickedOperator);
+                    numberStored[1] = basicCalculation(numberStored[1], Double.parseDouble(mainLabel.getText()), clickedOperator);
                     mainLabel.setText(Double.toString(hasNegSign(numberStored[1])));
                 }
             }
             case MULTIPLY, DIVIDE -> {
                 if (numberStored[1] != 0) {
                     //numberStored[1] = numberStored[1] / Double.parseDouble(mainLabel.getText());
-                    numberStored[1] = getSubResult(numberStored[1], Double.parseDouble(mainLabel.getText()), clickedOperator);
+                    numberStored[1] = basicCalculation(numberStored[1], Double.parseDouble(mainLabel.getText()), clickedOperator);
                     mainLabel.setText(Double.toString(numberStored[1]));
                 } else {
-                    numberStored[0] = getSubResult(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
+                    numberStored[0] = basicCalculation(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
                     mainLabel.setText(Double.toString(numberStored[0]));
                 }
             }
@@ -205,18 +252,18 @@ public class ScientificCalculate {
     public void arithmeticAddition(Operator operatorType, Operator clickedOperator) {
         switch (operatorType) {
             case ADDITION, SUBTRACT -> {
-                numberStored[0] = getSubResult(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
+                numberStored[0] = basicCalculation(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
                 mainLabel.setText(Double.toString(numberStored[0]));
             }
             case MULTIPLY, DIVIDE -> {
                 if (numberStored[1] != 0) {
-                    double subResult = getSubResult(numberStored[1], Double.parseDouble(mainLabel.getText()), operatorType);
-                    numberStored[0] = getSubResult(numberStored[0], subResult, operatorAssigned);
+                    double subResult = basicCalculation(numberStored[1], Double.parseDouble(mainLabel.getText()), operatorType);
+                    numberStored[0] = basicCalculation(numberStored[0], subResult, operatorAssigned);
                     numberStored[1] = 0;
                     operatorAssigned = Operator.NON;
                     mainLabel.setText(Double.toString(numberStored[0]));
                 } else {
-                    numberStored[0] = getSubResult(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
+                    numberStored[0] = basicCalculation(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
                     mainLabel.setText(Double.toString(numberStored[0]));
                 }
             }

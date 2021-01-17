@@ -79,8 +79,8 @@ public class UiContainer {
         sqRoot.addEventHandler(ActionEvent.ACTION, (e) -> {
             try {
                if (isNumberInLabel) {
-                   String result = mainCalculator.sqRoot(Double.parseDouble(mainLabel.getText()));
-                   mainLabel.setText(result);
+                   double result = mainCalculator.sqRoot(Double.parseDouble(mainLabel.getText()));
+                   mainLabel.setText(Double.toString(result));
                }
             } catch (Exception exception) {
                 mainLabel.setText("ERROR");
@@ -99,24 +99,21 @@ public class UiContainer {
             }
         });
 
-        Button pi = buttonFactory("𝜋");
+        Button pi = buttonFactory("π");
         pi.addEventHandler(ActionEvent.ACTION, (e) -> {
-            mainLabel.setText(Double.toString(StrictMath.PI));
+            mainLabel.setText(Double.toString(mainCalculator.getPi()));
         });
 
         Button powOfE = buttonFactory("eⁿ");
         powOfE.addEventHandler(ActionEvent.ACTION, (e) -> {
             double exp = Double.parseDouble(mainLabel.getText());
-            mainLabel.setText(Double.toString(Math.pow(StrictMath.PI, exp)));
+            mainLabel.setText(Double.toString(mainCalculator.powE(exp)));
         });
 
         Button percentage = buttonFactory("%");
-        percentage.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                double subResult = Double.parseDouble(mainLabel.getText()) / 100;
-                mainLabel.setText(Double.toString(subResult));
-            }
+        percentage.addEventHandler(ActionEvent.ACTION, (e) -> {
+           double value = Double.parseDouble(mainLabel.getText());
+           mainLabel.setText(Double.toString(mainCalculator.percentage(value)));
         });
 
         Button divide = buttonFactory("/");
@@ -210,10 +207,10 @@ public class UiContainer {
             initialClicked = true;
         });
 
-        topHighCalcArea = new HBox(10.0, squared, sqRoot, pi, powOfE);
+        topHighCalcArea = new HBox(10.0, squared, sqRoot, pi, divide);
         topHighCalcArea.setAlignment(Pos.CENTER);
 
-        topArea = new HBox(10.0, clear, sign, percentage, divide);
+        topArea = new HBox(10.0, clear, sign, percentage, powOfE);
         topArea.setAlignment(Pos.CENTER);
 
         numberPane = new GridPane();
