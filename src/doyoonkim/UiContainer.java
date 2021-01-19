@@ -90,6 +90,11 @@ public class UiContainer {
 
         Button squared = buttonFactory("x²");
         squared.addEventHandler(ActionEvent.ACTION, (e) -> {
+            /*
+            operatorStatus.setText("POW");
+            mainCalculator.pow(initialClicked);
+            initialClicked = true;
+             */
             try {
                 if (isNumberInLabel) {
                     double result = mainCalculator.squared(Double.parseDouble(mainLabel.getText()));

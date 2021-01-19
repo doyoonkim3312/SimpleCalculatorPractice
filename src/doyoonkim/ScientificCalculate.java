@@ -10,7 +10,7 @@ public class ScientificCalculate {
     private Operator operatorType;
     private Operator operatorAssigned;
     private Label mainLabel;
-    private double[] numberStored = new double[2];
+    private double[] numberStored = new double[3];
     private boolean isNumberInLabel = false;
 
     /**
@@ -166,9 +166,24 @@ public class ScientificCalculate {
     public double percentage(double value) {
         return basicCalculation(value, 100, Operator.DIVIDE);
     }
-    // this method need to be finalized later.
-    // public double pow(double num, double targetPow);
 
+
+    // this method need to be finalized later.
+    public void pow(boolean isNumberInLabel) {
+        if (!isNumberInLabel) {
+            numberStored[2] = Double.parseDouble(mainLabel.getText());
+            operatorType = Operator.POW;
+        }
+    }
+
+    /**
+     * This method calculates factorial value of proper param value.
+     * @param value: value used to calculate factorial value.
+     * @return <lo>
+     *     <li><b>factorial value</b> if <u>param value is valid</u> for calculating factorial</li>
+     *     <li><b>NaN</b> if <u>param value is invalid</u> for calculating factorial</li>
+     * </lo>
+     */
     public double factorial(double value) {
         if (value - (int) value == 0.0) {
             int result = 1;
@@ -181,6 +196,12 @@ public class ScientificCalculate {
         }
     }
 
+    /**
+     * This method performs trigonometric calculation.
+     * @param value: value in degree.
+     * @param trigType: Trigonometric operator type for proper calculation.
+     * @return proper result of trigonometric calculation.
+     */
     public double trigonometric(double value, Operator trigType) {
         switch (trigType) {
             case SIN -> { return Math.sin(StrictMath.toRadians(value)); }
@@ -209,8 +230,8 @@ public class ScientificCalculate {
      * <ul>
      *     <li>
      *         <h3>For division</h3>
-     *         <p>num1: numerator</p>
-     *         <p>num2: denominator</p>
+     *         <p><b>num1</b>: numerator</p>
+     *         <p><b>num2</b>: denominator</p>
      *         <p>returns num1 / num2</p>
      *     </li>
      * </ul>
@@ -258,6 +279,19 @@ public class ScientificCalculate {
                     mainLabel.setText(Double.toString(numberStored[0]));
                 }
             }
+            case POW -> {
+                double exp = Double.parseDouble(mainLabel.getText());
+                double result = Math.pow(numberStored[2], exp);
+                numberStored[2] = 0;
+
+                if (numberStored[1] != 0) {
+                    numberStored[1] = basicCalculation(numberStored[1], result, clickedOperator);
+                    mainLabel.setText(Double.toString(numberStored[1]));
+                } else {
+                    numberStored[0] = basicCalculation(numberStored[0], result, clickedOperator);
+                    mainLabel.setText(Double.toString(numberStored[0]));
+                }
+            }
             default -> numberStored[0] = Double.parseDouble(mainLabel.getText());
         }
     }
@@ -283,6 +317,23 @@ public class ScientificCalculate {
                     mainLabel.setText(Double.toString(numberStored[0]));
                 } else {
                     numberStored[0] = basicCalculation(numberStored[0], Double.parseDouble(mainLabel.getText()), operatorType);
+                    mainLabel.setText(Double.toString(numberStored[0]));
+                }
+            }
+            case POW -> {
+                double exp = Double.parseDouble(mainLabel.getText());
+                double result = Math.pow(numberStored[2], exp);
+                numberStored[2] = 0;
+
+                if (numberStored[1] != 0) {
+                    // This code below should be finalized.
+                    double subResult = basicCalculation(numberStored[1], result, Operator.MULTIPLY);
+                    numberStored[0] = basicCalculation(numberStored[0], subResult, operatorAssigned);
+                    numberStored[1] = 0;
+                    operatorAssigned = Operator.NON;
+                    mainLabel.setText(Double.toString(numberStored[0]));
+                } else {
+                    numberStored[0] = basicCalculation(numberStored[0], result, clickedOperator);
                     mainLabel.setText(Double.toString(numberStored[0]));
                 }
             }
