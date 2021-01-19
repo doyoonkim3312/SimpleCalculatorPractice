@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 public class ScientificCalculate {
     private Operator operatorType;
     private Operator operatorAssigned;
+    private Operator operatorBfPow;
     private Label mainLabel;
     private double[] numberStored = new double[3];
     private boolean isNumberInLabel = false;
@@ -172,6 +173,7 @@ public class ScientificCalculate {
     public void pow(boolean isNumberInLabel) {
         if (!isNumberInLabel) {
             numberStored[2] = Double.parseDouble(mainLabel.getText());
+            operatorBfPow = operatorType;
             operatorType = Operator.POW;
         }
     }
@@ -285,12 +287,13 @@ public class ScientificCalculate {
                 numberStored[2] = 0;
 
                 if (numberStored[1] != 0) {
-                    numberStored[1] = basicCalculation(numberStored[1], result, clickedOperator);
+                    numberStored[1] = basicCalculation(numberStored[1], result, operatorBfPow);
                     mainLabel.setText(Double.toString(numberStored[1]));
                 } else {
-                    numberStored[0] = basicCalculation(numberStored[0], result, clickedOperator);
+                    numberStored[0] = basicCalculation(numberStored[0], result, operatorBfPow);
                     mainLabel.setText(Double.toString(numberStored[0]));
                 }
+                operatorBfPow = Operator.NON;
             }
             default -> numberStored[0] = Double.parseDouble(mainLabel.getText());
         }
@@ -327,15 +330,16 @@ public class ScientificCalculate {
 
                 if (numberStored[1] != 0) {
                     // This code below should be finalized.
-                    double subResult = basicCalculation(numberStored[1], result, Operator.MULTIPLY);
+                    double subResult = basicCalculation(numberStored[1], result, operatorBfPow);
                     numberStored[0] = basicCalculation(numberStored[0], subResult, operatorAssigned);
                     numberStored[1] = 0;
                     operatorAssigned = Operator.NON;
                     mainLabel.setText(Double.toString(numberStored[0]));
                 } else {
-                    numberStored[0] = basicCalculation(numberStored[0], result, clickedOperator);
+                    numberStored[0] = basicCalculation(numberStored[0], result, operatorBfPow);
                     mainLabel.setText(Double.toString(numberStored[0]));
                 }
+                operatorBfPow = Operator.NON;
             }
             default -> numberStored[0] = Double.parseDouble(mainLabel.getText());
         }
